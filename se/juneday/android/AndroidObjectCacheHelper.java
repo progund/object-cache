@@ -1,4 +1,4 @@
-package se.juneday;
+package se.juneday.android;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;

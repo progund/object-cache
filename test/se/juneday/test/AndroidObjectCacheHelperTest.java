@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import se.juneday.ObjectCache;
-import se.juneday.AndroidObjectCacheHelper;
+import se.juneday.android.AndroidObjectCacheHelper;
 import se.juneday.test.User;
 
 public class AndroidObjectCacheHelperTest {

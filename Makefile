@@ -8,7 +8,7 @@ OC_SRC= \
   se/juneday/ObjectCache.java
 
 ANDROID_OC_SRC= \
-   android/se/juneday/AndroidObjectCacheHelper.java 
+   se/juneday/android/AndroidObjectCacheHelper.java 
 
 OC_TEST_SRC= \
   test/se/juneday/test/ObjectCacheReadSingleTest.java \
@@ -30,13 +30,12 @@ endif
 
 
 # Add android-stubs to CLASSPATH (even if not used)
-CLASSPATH=.$(FILE_SEP)android$(FILE_SEP)test$(FILE_SEP)bin$(FILE_SEP)libs/android-stubs-master/
+CLASSPATH=.$(FILE_SEP)test$(FILE_SEP)bin$(FILE_SEP)libs/android-stubs-master/
 
 OC_CLASSES=$(OC_SRC:%.java=%.class)
 ANDROID_OC_CLASSES=$(ANDROID_OC_SRC:%.java=%.class)
 OC_TEST_CLASSES=$(OC_TEST_SRC:%.java=%.class)
 
-DEST_DIR=.
 RELEASE_DIR=release
 
 
@@ -44,18 +43,20 @@ RELEASE_DIR=release
 # Rules
 #
 %.class: %.java
-	javac -d $(DEST_DIR) -cp $(CLASSPATH) $<
+	javac -cp $(CLASSPATH) $<
 
 %.pdf: %.md
 	pandoc $< -o $@
 
-jar: $(DEST_DIR) $(OC_CLASSES)
+jar: $(OC_CLASSES)
 	@echo "Creating jar file"
-	echo jar cvf object-cache-$(VERSION).jar $(OC_CLASSES)
+	jar cvf object-cache-$(VERSION).jar $(OC_CLASSES)
+	@echo "Created jar file: object-cache-$(VERSION).jar"
 
-android-jar: $(DEST_DIR) $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
+android-jar: $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 	@echo "Creating jar file"
-	jar cvf object-cache-android-$(VERSION).jar bin
+	jar cvf object-cache-android-$(VERSION).jar $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
+	@echo "Created jar file: object-cache-android-$(VERSION).jar"
 
 $(DEST_DIR):
 	mkdir -p $(DEST_DIR) 
