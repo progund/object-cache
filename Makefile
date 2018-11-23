@@ -105,6 +105,8 @@ really-clean: clean
 	@echo "all cleaned up"
 
 doc: README.pdf
+    javadoc -d doc -link "https://docs.oracle.com/javase/8/docs/api/" se.juneday
+
 
 .PHONY: libs
 .PHONY: test
