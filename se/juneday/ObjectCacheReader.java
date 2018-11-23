@@ -1,6 +1,6 @@
 package se.juneday;
 
-import java.util.List;
+import java.util.Collection;
 import java.io.File;
 
 public class ObjectCacheReader<T> {
@@ -23,7 +23,7 @@ public class ObjectCacheReader<T> {
    *
    */ 
   public void printObjects() {
-    List<T> objects = objects();
+    Collection<T> objects = objects();
 
     if (objects!=null) {
       for (T o : objects) {
@@ -37,7 +37,7 @@ public class ObjectCacheReader<T> {
    * file. 
    *
    */ 
-  public List<T> objects() {
+  public Collection<T> objects() {
       return cache.readObjects();
   }
 

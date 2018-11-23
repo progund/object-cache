@@ -1,8 +1,9 @@
 package se.juneday;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import java.io.File;
 
 import java.io.FileInputStream;
@@ -17,7 +18,7 @@ import java.io.ObjectOutputStream;
  */
 public class ObjectCache<T> {
 
-  private List<T> objects;
+  private Collection<T> objects;
   private long localCacheDate ;
 
   private String cacheFileName;
@@ -53,7 +54,7 @@ public class ObjectCache<T> {
    *
    * @param objects The objects to cache
    */ 
-  private void set(List<T> objects) {
+  private void set(Collection<T> objects) {
     this.objects = objects;
     localCacheDate = System.currentTimeMillis();
   }
@@ -65,7 +66,7 @@ public class ObjectCache<T> {
    * @param object The object to cache
    */ 
   private void setSingle(T object) {
-    ArrayList<T> objectList = new ArrayList<>();
+    Collection<T> objectList = new ArrayList<>();
     objectList.add(object);
     this.objects = objectList;
   }
@@ -97,7 +98,7 @@ public class ObjectCache<T> {
    * @return The list of objects read from file.
    */ 
   @SuppressWarnings("unchecked")
-  private List<T> pull() {
+  private Collection<T> pull() {
     File f = new File(cacheFileName);
     if (!f.exists()) {
       System.err.println("missing cache file: " + f);
@@ -112,11 +113,11 @@ public class ObjectCache<T> {
     }
     FileInputStream fis = null;
     ObjectInputStream in = null;
-    List<T> tmpObjects;
+    Collection<T> tmpObjects;
     try {
       fis = new FileInputStream(cacheFileName);
       in = new ObjectInputStream(fis);
-      tmpObjects = (List<T>) in.readObject();
+      tmpObjects = (Collection<T>) in.readObject();
       in.close();
       objects = tmpObjects;
     } catch (ClassNotFoundException ex) {
@@ -141,7 +142,7 @@ public class ObjectCache<T> {
    *
    * @return The list of cached objects 
    */ 
-  private List<T> get() {
+  private Collection<T> get() {
     return objects;
   }
 
@@ -155,7 +156,11 @@ public class ObjectCache<T> {
     if (objects == null) {
       return null;
     }
-    return objects.get(0);
+    Iterator<T> iter = objects.iterator();
+    if ( iter.hasNext() ) {
+      return iter.next();
+    }
+    return null;
   }
 
   /**
@@ -176,7 +181,7 @@ public class ObjectCache<T> {
    *
    * @param repos - the objects to cache
    */ 
-  public void storeObjects(List<T> repos) {
+  public void storeObjects(Collection<T> repos) {
     set(repos);
     push();
   }
@@ -196,10 +201,10 @@ public class ObjectCache<T> {
    *
    * @return the cached objects - if no object has been cached, an empty list is returned
    */ 
-  public List<T> readObjects() {
+  public Collection<T> readObjects() {
     pull();
 
-    List<T> cachedObjects = get();
+    Collection<T> cachedObjects = get();
     if (cachedObjects!=null) {
       return cachedObjects;
     }

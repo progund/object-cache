@@ -1,8 +1,7 @@
 package se.juneday.test;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Collection;
 
 import se.juneday.ObjectCacheReader;
 import se.juneday.test.User;
@@ -13,7 +12,7 @@ public class OCReaderManyTest {
     ObjectCacheReader<User> reader = new ObjectCacheReader<>(User.class.getSimpleName());
 
     System.out.print("Testing reading objects: ");
-    List<User> cached = reader.objects();
+    Collection<User> cached = reader.objects();
     assert (cached.size()==2) : "Expected 2 users, found " + cached.size();
     
     System.out.println("OK");

@@ -1,7 +1,7 @@
 package se.juneday.test;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import java.util.ArrayList;
 
 import se.juneday.ObjectCache;
@@ -13,8 +13,8 @@ public class ObjectCacheStoreManyTest {
     ObjectCache<User> cache = new ObjectCache<>(User.class);
 
     System.out.print("Testing creating objects: ");
-    List<User> users = new ArrayList<>();
-
+    Collection<User> users = new ArrayList<>();
+    
     users.add(new User("Henrik Sandklef", "hesa@sandklef.com"));
     users.add(new User("Rikard Fröberg", "rille@rillefroberg.se"));
     assert (users.size()==2) : "Expected 2 users, found " + users.size();
