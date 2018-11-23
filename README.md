@@ -21,14 +21,30 @@ List or one single object).
 
 ### Build reuirements for Android
 
-If you want to use ObjectCache in Android we've written a small helper
-class to ease up life for you. The tests for this class need ```android-stubs``` which you can find here: [android-stubs](https://github.com/progund/android-stubs). we have a make target called ```download-dependencies``` for downloading this software. To download and use android-stubs type
+* *```android-stubs```* - if you want to use ObjectCache in Android
+we've written a small helper class to ease up life for you. The tests
+for this class need ```android-stubs``` which you can find here:
+[android-stubs](https://github.com/progund/android-stubs). we have a
+make target called ```download-dependencies``` for downloading this
+software. To download and use android-stubs type
 
 ~~~
     make download-dependencies
 ~~~
 
 ## Requirements in your classes (to be cached)
+
+Let's say you want to cache objects of your super awesome class ```User```:
+
+~~~
+  public class User {
+    private String name;
+    private String email;
+
+    ....
+~~~
+
+
 
 ### Fixing the User class (above)
 
@@ -38,14 +54,16 @@ You need to add a ```serialVersionUID```. Let's use ```1L```.
   private static final long serialVersionUID = 1L;
 ~~~
 
+*Note: check out the text about serialization below. ```1L``` is not a good value. It is used as an example here.*
 
-So the class, ```User```, looks like this.
+So the class, ```User```, looks like this:
+
 ~~~
     public class User implements Serializable {
-        String name;
-        String email;
+        private String name;
+        private String email;
 
-    private static final long serialVersionUID = 1L;
+       private static final long serialVersionUID = 1L;
 ~~~
 
 etc etc
@@ -54,84 +72,87 @@ etc etc
 
 ## Example class to cache
 
-In this example we'll be caching a class called ```User``` representing a user in some system:
+In this example we'll (again) be looking at a class called ```User``` representing a user in some system:
 
 ~~~
   public class User implements Serializable {
-
     private String name;
-
     private String email;
 
     ....
 ~~~
 
-## Create an ObjectCache 
+## Use ObjectCache in Java
 
-* create an ObjectCache object, including the type of the objects to cache:
+Create an ObjectCache object, including the type of the objects to cache:
 
 ~~~
     ObjectCache<User> cache = new ObjectCache<>(User.class);
 ~~~
 
-## Single object
+### Single object
 
-* Store object in cache:
+Store a single object in cache:
 
 ~~~
-    User u = new User("Henrik Sandklef", "hesa@sandklef.com")
+    User u = new User("Henrik Sandklef", "hesa@henriksandklef.com")
     cache.storeObject(u);
 ~~~
 
-* Read object from cache:
+Read object from cache:
 
-    ```User cachedUser = cache.readObject();```
+~~~
+    User cachedUser = cache.readObject();
+~~~
 
-## List of objects
+### List of objects
 
-* Store a ```List``` of objects in cache:
+Store a ```List``` of objects in cache:
 
 ~~~
     List<User> users = new ArrayList<>();
-    users.add(new User("Henrik Sandklef", "hesa@sandklef.com"));
+    users.add(new User("Henrik Sandklef", "hesa@henriksandklef.com"));
     users.add(new User("Rikard Fröberg", "rille@rillefroberg.se"));
     cache.storeObjects(users);
 ~~~
 
-* Read objects from cache:
+Read objects from cache:
 
-    ```    List<User> cached = cache.readObjects();```
+~~~
+    List<User> cached = cache.readObjects();
+~~~
+
+## Use ObjectCache in Android
+
+### Create an ObjectCache in Android
+
+Creating an ObjectCache is the only thing that differs between normal
+Java and Android. The reason is that we need to make sure that we're
+allowed to write in the directory to store the cache file.
+
+* reate an ObjectCache object, including the type of the objects to cache:
+
+~~~
+    String fileName =
+        AndroidObjectCacheHelper.objectCacheFileName(context, User.class);
+    ObjectCache<User> cache = new ObjectCache<>(fileName);
+~~~
 
 # Source code and examples
 
-Download the source from here: [java-extra-lectures](https://github.com/progund/java-extra-lectures). In the directory ```caching``` you'll find the ObjectCache source code (in the ```se/juneday/``` folder) and some test code. To build ObjectCache (and javadoc) and test it:
+**TODO:** Download the source from here: [java-extra-lectures](https://github.com/progund/java-extra-lectures). In the directory ```caching``` you'll find the ObjectCache source code (in the ```se/juneday/``` folder) and some test code. To build ObjectCache (and javadoc) and test it:
 
-## Compile ##
+# Developing #
 
-```make```
+```make``` - builds ObjectCache
 
-## Test ##
+```make test``` - tests ObjectCache
 
-```make test```
+```make jar``` - create a jar file (for release)
 
-## Create jar  ##
+```make android-jar``` - create an android jar file (for release)
 
-```make jar```
-
-# Using ObjectCache in Android
-
-## ADHD
-
-In android we recommened you use the class
-```AndroidObjectCacheHelper``` that comes with ObjectCache to get a
-proper filename that you can use to create your ObjectCache:
-
-~~~
-     String fileName = 
-         AndroidObjectCacheHelper.objectCacheFileName(context(), User.class);
-     ObjectCache<User> cache = new ObjectCache<>(User.class);
-~~~
-     
+# Tools using ObjectCache # 
 
 ## ADHD
 
