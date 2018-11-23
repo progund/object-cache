@@ -13,6 +13,29 @@ much overhead.
 Here's a minimal approach to cache objects (either many object in a
 List or one single object).
 
+# Supported classes
+
+For single object:
+
+* all classes implementing Serializable
+
+For many objects
+
+* All List classes implementing Serializable:
+
+  * ArrayList 
+
+  * LinkedList
+  
+  * RoleList
+
+  * RoleUnresolvedList
+
+  *  Stack
+
+  * Vector
+
+
 # Requirements
 
 ## Build requirements

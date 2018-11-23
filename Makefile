@@ -28,6 +28,7 @@ ifeq ($(OS),Windows_NT)
 FILE_SEP=;
 endif
 
+RELEASE_DIR=release/$(VERSION)
 
 # Add android-stubs to CLASSPATH (even if not used)
 CLASSPATH=.$(FILE_SEP)test$(FILE_SEP)bin$(FILE_SEP)libs/android-stubs-master/
@@ -36,8 +37,8 @@ OC_CLASSES=$(OC_SRC:%.java=%.class)
 ANDROID_OC_CLASSES=$(ANDROID_OC_SRC:%.java=%.class)
 OC_TEST_CLASSES=$(OC_TEST_SRC:%.java=%.class)
 
-RELEASE_DIR=release
-
+JAR_FILE=object-cache-$(VERSION).jar
+ANDROID_JAR_FILE=object-cache-android-$(VERSION).jar
 
 #
 # Rules
@@ -50,18 +51,19 @@ RELEASE_DIR=release
 
 jar: $(OC_CLASSES)
 	@echo "Creating jar file"
-	jar cvf object-cache-$(VERSION).jar $(OC_CLASSES)
+	jar cvf $(JAR_FILE) $(OC_CLASSES)
 	@echo "Created jar file: object-cache-$(VERSION).jar"
 
 android-jar: $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 	@echo "Creating jar file"
-	jar cvf object-cache-android-$(VERSION).jar $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
-	@echo "Created jar file: object-cache-android-$(VERSION).jar"
+	jar cvf $(ANDROID_JAR_FILE) $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
+	@echo "Created jar file: $(ANDROID_JAR_FILE)"
 
 $(DEST_DIR):
 	mkdir -p $(DEST_DIR) 
 
 $(RELEASE_DIR):
+	echo "Making dir: $(RELEASE_DIR) "
 	mkdir -p $(RELEASE_DIR) 
 
 test: $(OC_TEST_CLASSES)
@@ -105,6 +107,10 @@ really-clean: clean
 	-rm -fr doc bin libs release
 	@echo "all cleaned up"
 
+release: $(ANDROID_JAR_FILE) $(JAR_FILE)
+	mv $(JAR_FILE) $(ANDROID_JAR_FILE) $(RELEASE_DIR)/
+
+
 doc/index.html: 
 	javadoc -d doc -link "https://docs.oracle.com/javase/8/docs/api/" se.juneday
 
@@ -113,4 +119,5 @@ doc: README.pdf doc/index.html
 
 .PHONY: libs
 .PHONY: test
+.PHONY: release
 
