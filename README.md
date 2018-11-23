@@ -11,7 +11,7 @@ database is the proper way of doing this but we feel this is way too
 much overhead.
 
 Here's a minimal approach to cache objects (either many object in a
-List or one single object).
+Collection or one single object).
 
 # Supported classes
 
@@ -21,20 +21,7 @@ For single object:
 
 For many objects
 
-* All List classes implementing Serializable:
-
-  * ArrayList 
-
-  * LinkedList
-  
-  * RoleList
-
-  * RoleUnresolvedList
-
-  *  Stack
-
-  * Vector
-
+* All Collections classes implementing Serializable
 
 # Requirements
 
@@ -128,9 +115,9 @@ Read object from cache:
     User cachedUser = cache.readObject();
 ~~~
 
-### List of objects
+### Collection of objects
 
-Store a ```List``` of objects in cache:
+Store a ```Collection``` (e g ArralyList) of objects in cache:
 
 ~~~
     List<User> users = new ArrayList<>();
@@ -142,7 +129,7 @@ Store a ```List``` of objects in cache:
 Read objects from cache:
 
 ~~~
-    List<User> cached = cache.readObjects();
+    Collection<User> cached = cache.readObjects();
 ~~~
 
 ## Use ObjectCache in Android
