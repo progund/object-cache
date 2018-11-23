@@ -23,8 +23,8 @@ public class ObjectCacheReader<T> {
    *
    */ 
   public void printObjects() {
-    List<T> objects = cache.readObjects();
-    
+    List<T> objects = objects();
+
     if (objects!=null) {
       for (T o : objects) {
         System.out.println(" * " + o );

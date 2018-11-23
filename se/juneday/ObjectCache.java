@@ -171,16 +171,31 @@ public class ObjectCache<T> {
     return objects.size();
   }
 
-  public  void storeObjects(List<T> repos) {
+  /**
+   * Store (cache) objects in the cache
+   *
+   * @param repos - the objects to cache
+   */ 
+  public void storeObjects(List<T> repos) {
     set(repos);
     push();
   }
 
-  public  void storeObject(T repo) {
+  /**
+   * Store (cache) one single object in the cache
+   *
+   * @param repo - the object to cache
+   */ 
+  public void storeObject(T repo) {
     setSingle(repo);
     push();
   }
 
+  /**
+   * Read (cached) objects from the cache
+   *
+   * @return the cached objects - if no object has been cached, an empty list is returned
+   */ 
   public List<T> readObjects() {
     pull();
 
@@ -191,6 +206,11 @@ public class ObjectCache<T> {
     return new ArrayList<>();
   }
 
+  /**
+   * Read one single (cached) object from the cache
+   *
+   * @return the cached object - if no object has been cached, null is returned
+   */ 
   public T readObject() {
     pull();
 

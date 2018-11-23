@@ -105,8 +105,10 @@ really-clean: clean
 	-rm -fr doc bin libs release
 	@echo "all cleaned up"
 
-doc: README.pdf
-    javadoc -d doc -link "https://docs.oracle.com/javase/8/docs/api/" se.juneday
+doc/index.html: 
+	javadoc -d doc -link "https://docs.oracle.com/javase/8/docs/api/" se.juneday
+
+doc: README.pdf doc/index.html
 
 
 .PHONY: libs
