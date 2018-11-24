@@ -49,15 +49,18 @@ ANDROID_JAR_FILE=object-cache-android-$(VERSION).jar
 %.pdf: %.md
 	pandoc $< -o $@
 
-jar: $(OC_CLASSES)
+
+$(JAR_FILE): $(OC_CLASSES)
 	@echo "Creating jar file"
 	jar cvf $(JAR_FILE) $(OC_CLASSES)
 	@echo "Created jar file: object-cache-$(VERSION).jar"
+jar: $(JAR_FILE)
 
-android-jar: $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
+$(ANDROID_JAR_FILE): $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 	@echo "Creating jar file"
 	jar cvf $(ANDROID_JAR_FILE) $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 	@echo "Created jar file: $(ANDROID_JAR_FILE)"
+android-jar: $(ANDROID_JAR_FILE)
 
 $(DEST_DIR):
 	mkdir -p $(DEST_DIR) 
@@ -92,7 +95,15 @@ test: $(OC_TEST_CLASSES)
 	@java -cp $(CLASSPATH) se.juneday.test.AndroidObjectCacheHelperTest 
 
 download-dependencies:
-	@-if [ ! -f libs/android-stubs-master/android/content/Context.java ]; then echo "Downloading android-stubs"; mkdir -p libs ; cd libs && curl -LJ -o android-stubs.zip https://github.com/progund/android-stubs/archive/master.zip  && unzip android-stubs.zip; else echo android-stubs already downloaded; fi
+	@-if [ ! -f libs/android-stubs-master/android/content/Context.java ]; then \
+		echo "Downloading android-stubs"; \
+                mkdir -p libs ; \
+		cd libs && \
+		curl -LJ -o android-stubs.zip https://github.com/progund/android-stubs/archive/master.zip  && \
+		unzip android-stubs.zip; \
+	else \
+		echo android-stubs already downloaded; \
+	fi
 
 clean:
 	-rm $(OC_CLASSES) 
@@ -107,8 +118,8 @@ really-clean: clean
 	-rm -fr doc bin libs release
 	@echo "all cleaned up"
 
-release: $(ANDROID_JAR_FILE) $(JAR_FILE)
-	mv $(JAR_FILE) $(ANDROID_JAR_FILE) $(RELEASE_DIR)/
+release: $(ANDROID_JAR_FILE) $(JAR_FILE) $(RELEASE_DIR) doc/index.html
+	mv $(JAR_FILE) $(ANDROID_JAR_FILE) doc/ $(RELEASE_DIR)/ 
 
 
 doc/index.html: 
