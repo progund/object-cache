@@ -136,9 +136,10 @@ Read objects from cache:
 
 ### Create an ObjectCache in Android
 
-Creating an ObjectCache is the only thing that differs between normal
-Java and Android. The reason is that we need to make sure that we're
-allowed to write in the directory to store the cache file.
+Creating an ObjectCache instance is the only thing that differs
+between normal Java and Android. The reason is that we need to make
+sure that we're allowed to write in the directory to store the cache
+file.
 
 * reate an ObjectCache object, including the type of the objects to cache:
 
