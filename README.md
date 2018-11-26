@@ -161,8 +161,6 @@ file.
 
 ```make jar``` - create a jar file (for release)
 
-```make android-jar``` - create an android jar file (for release)
-
 # Tools using ObjectCache # 
 
 ## ADHD
