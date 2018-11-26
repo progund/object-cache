@@ -50,17 +50,11 @@ ANDROID_JAR_FILE=object-cache-android-$(VERSION).jar
 	pandoc $< -o $@
 
 
-$(JAR_FILE): $(OC_CLASSES)
+$(JAR_FILE): $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 	@echo "Creating jar file"
-	jar cvf $(JAR_FILE) $(OC_CLASSES)
+	jar cvf $(JAR_FILE) $(OC_CLASSES) $(ANDROID_OC_CLASSES) README.md
 	@echo "Created jar file: object-cache-$(VERSION).jar"
-jar: $(JAR_FILE)
-
-$(ANDROID_JAR_FILE): $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
-	@echo "Creating jar file"
-	jar cvf $(ANDROID_JAR_FILE) $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
-	@echo "Created jar file: $(ANDROID_JAR_FILE)"
-android-jar: $(ANDROID_JAR_FILE)
+jar: test $(JAR_FILE)
 
 $(DEST_DIR):
 	mkdir -p $(DEST_DIR) 
@@ -131,4 +125,3 @@ doc: README.pdf doc/index.html
 .PHONY: libs
 .PHONY: test
 .PHONY: release
-
