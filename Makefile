@@ -5,7 +5,7 @@ VERSION=0.1
 #
 OC_SRC= \
   se/juneday/ObjectCacheReader.java \
-  se/juneday/ObjectCache.java
+  se/juneday/ObjectCache.java    
 
 ANDROID_OC_SRC= \
    se/juneday/android/AndroidObjectCacheHelper.java 
@@ -52,8 +52,10 @@ ANDROID_JAR_FILE=object-cache-android-$(VERSION).jar
 
 $(JAR_FILE): $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 	@echo "Creating jar file"
-	jar cvf $(JAR_FILE) $(OC_CLASSES) $(ANDROID_OC_CLASSES) README.md
+	jar cvf $(JAR_FILE) `find se -name "*.class"` README.md
 	@echo "Created jar file: object-cache-$(VERSION).jar"
+	@zipinfo object-cache-$(VERSION).jar
+
 jar: test $(JAR_FILE)
 
 $(DEST_DIR):
