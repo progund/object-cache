@@ -29,7 +29,7 @@ For many objects
 
 * *```make```* - we use make to build ObjectCache so you need to install it, unless you want to compile yourself.
 
-### Build reuirements for Android
+### Build requirements for Android
 
 * *```android-stubs```* - if you want to use ObjectCache in Android
 we've written a small helper class to ease up life for you. The tests
