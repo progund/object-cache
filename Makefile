@@ -1,4 +1,4 @@
-VERSION=0.1
+VERSION=0.1.91
 
 #
 # 
@@ -21,10 +21,11 @@ OC_TEST_SRC= \
 
 
 
-ANDROID_STUBS_VERSION=01
+ANDROID_STUBS_VERSION=0.1.90
+ANDROID_STUBS_FILE_VERSION=01
 ANDROID_STUBS_JAR_FILE=android-stubs-$(ANDROID_STUBS_VERSION).jar
 ANDROID_STUBS_JAR=libs/$(ANDROID_STUBS_JAR_FILE)
-ANDROID_STUBS_JAR_URL=https://github.com/progund/android-stubs/releases/download/$(ANDROID_STUBS_VERSION)/$(ANDROID_STUBS_JAR_FILE)
+ANDROID_STUBS_JAR_URL=https://github.com/progund/android-stubs/releases/download/$(ANDROID_STUBS_FILE_VERSION)/$(ANDROID_STUBS_JAR_FILE)
 
 FILE_SEP=:
 ifeq ($(OS),Windows_NT)
@@ -55,7 +56,7 @@ ANDROID_JAR_FILE=object-cache-android-$(VERSION).jar
 	pandoc $< -o $@
 
 
-$(JAR_FILE): $(ANDROID_STUBS_JAR) $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
+$(JAR_FILE): check-stubs test $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 	@echo "Creating jar file"
 	jar cvf $(JAR_FILE) `find se -name "*.class"` README.md
 	@echo "Created jar file: object-cache-$(VERSION).jar"
@@ -70,7 +71,7 @@ $(RELEASE_DIR):
 	echo "Making dir: $(RELEASE_DIR) "
 	mkdir -p $(RELEASE_DIR) 
 
-test: $(ANDROID_STUBS_JAR) $(OC_TEST_CLASSES)
+test: check-stubs $(OC_TEST_CLASSES)
 	@echo "  ********** Testing many **********"
 	@echo "  --== Test store (many) ==--"
 	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheStoreManyTest --store
@@ -103,7 +104,6 @@ clean:
 	-find . -name "*~" | xargs rm
 	-find . -name "*.data" | xargs rm
 	-rm -fr doc 
-	-rm -fr libs
 	-rm README.pdf
 	@echo "all cleaned up"
 
@@ -111,14 +111,16 @@ really-clean: clean
 	-rm -fr doc bin libs release
 	@echo "all cleaned up"
 
-release: $(ANDROID_JAR_FILE) $(JAR_FILE) $(RELEASE_DIR) doc/index.html
+release: check-stubs $(JAR_FILE) $(RELEASE_DIR) doc/index.html
 	mv $(JAR_FILE) $(ANDROID_JAR_FILE) doc/ $(RELEASE_DIR)/ 
-
 
 doc/index.html: 
 	javadoc -d doc -link "https://docs.oracle.com/javase/8/docs/api/" se.juneday
 
 doc: README.pdf doc/index.html
+
+check-stubs:
+	@if [ ! -f $(ANDROID_STUBS_JAR) ]; then echo -e "Missing library $(ANDROID_STUBS_JAR), to fix this:\n  make download-dependencies"; exit 1; fi
 
 $(ANDROID_STUBS_JAR):
 	mkdir -p libs
