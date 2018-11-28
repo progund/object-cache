@@ -21,6 +21,11 @@ OC_TEST_SRC= \
 
 
 
+ANDROID_STUBS_VERSION=01
+ANDROID_STUBS_JAR_FILE=android-stubs-$(ANDROID_STUBS_VERSION).jar
+ANDROID_STUBS_JAR=libs/$(ANDROID_STUBS_JAR_FILE)
+ANDROID_STUBS_JAR_URL=https://github.com/progund/android-stubs/releases/download/$(ANDROID_STUBS_VERSION)/$(ANDROID_STUBS_JAR_FILE)
+
 FILE_SEP=:
 ifeq ($(OS),Windows_NT)
 # who took the decision to use ";" to separate directories in Windows?
@@ -31,7 +36,7 @@ endif
 RELEASE_DIR=release/$(VERSION)
 
 # Add android-stubs to CLASSPATH (even if not used)
-CLASSPATH=.$(FILE_SEP)test$(FILE_SEP)bin$(FILE_SEP)libs/android-stubs-master/
+CLASSPATH=.$(FILE_SEP)test$(FILE_SEP)bin$(FILE_SEP)$(ANDROID_STUBS_JAR)
 
 OC_CLASSES=$(OC_SRC:%.java=%.class)
 ANDROID_OC_CLASSES=$(ANDROID_OC_SRC:%.java=%.class)
@@ -50,7 +55,7 @@ ANDROID_JAR_FILE=object-cache-android-$(VERSION).jar
 	pandoc $< -o $@
 
 
-$(JAR_FILE): $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
+$(JAR_FILE): $(ANDROID_STUBS_JAR) $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 	@echo "Creating jar file"
 	jar cvf $(JAR_FILE) `find se -name "*.class"` README.md
 	@echo "Created jar file: object-cache-$(VERSION).jar"
@@ -65,7 +70,7 @@ $(RELEASE_DIR):
 	echo "Making dir: $(RELEASE_DIR) "
 	mkdir -p $(RELEASE_DIR) 
 
-test: $(OC_TEST_CLASSES)
+test: $(ANDROID_STUBS_JAR) $(OC_TEST_CLASSES)
 	@echo "  ********** Testing many **********"
 	@echo "  --== Test store (many) ==--"
 	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheStoreManyTest --store
@@ -90,16 +95,7 @@ test: $(OC_TEST_CLASSES)
 	@echo "  --== Test Android helper ==--"
 	@java -cp $(CLASSPATH) se.juneday.test.AndroidObjectCacheHelperTest 
 
-download-dependencies:
-	@-if [ ! -f libs/android-stubs-master/android/content/Context.java ]; then \
-		echo "Downloading android-stubs"; \
-                mkdir -p libs ; \
-		cd libs && \
-		curl -LJ -o android-stubs.zip https://github.com/progund/android-stubs/archive/master.zip  && \
-		unzip android-stubs.zip; \
-	else \
-		echo android-stubs already downloaded; \
-	fi
+download-dependencies: $(ANDROID_STUBS_JAR) 
 
 clean:
 	-rm $(OC_CLASSES) 
@@ -107,6 +103,7 @@ clean:
 	-find . -name "*~" | xargs rm
 	-find . -name "*.data" | xargs rm
 	-rm -fr doc 
+	-rm -fr libs
 	-rm README.pdf
 	@echo "all cleaned up"
 
@@ -122,6 +119,10 @@ doc/index.html:
 	javadoc -d doc -link "https://docs.oracle.com/javase/8/docs/api/" se.juneday
 
 doc: README.pdf doc/index.html
+
+$(ANDROID_STUBS_JAR):
+	mkdir -p libs
+	curl -o $(ANDROID_STUBS_JAR) -LJ $(ANDROID_STUBS_JAR_URL) 
 
 
 .PHONY: libs
