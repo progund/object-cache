@@ -166,6 +166,8 @@ Read objects from cache:
 
 ## Use ObjectCache in Android
 
+We have a more complete guide on how to use ObjectCache in Android, check out: https://github.com/progund/object-cache/blob/master/doc/README-ANDROID.md
+
 ### Create an ObjectCache in Android
 
 Creating an ObjectCache instance is the only thing that differs
@@ -173,7 +175,7 @@ between normal Java and Android. The reason is that we need to make
 sure that we're allowed to write in the directory to store the cache
 file.
 
-* reate an ObjectCache object, including the type of the objects to cache:
+Create an ObjectCache object, including the type of the objects to cache:
 
 ~~~
     String fileName =
@@ -181,11 +183,32 @@ file.
     ObjectCache<User> cache = new ObjectCache<>(fileName);
 ~~~
 
-# Source code and examples
+# Download ObjectCache
 
-**TODO:** Download the source from here: [java-extra-lectures](https://github.com/progund/java-extra-lectures). In the directory ```caching``` you'll find the ObjectCache source code (in the ```se/juneday/``` folder) and some test code. To build ObjectCache (and javadoc) and test it:
+## Released jar files
 
-# Developing #
+Go to (ObjectCache)[https://github.com/progund/object-cache] and click releases. Aim for the latest jar file (of the latest release) and download it. We download using ```curl``` so:
+
+~~~
+curl -LJO https://github.com/progund/object-cache/releases/download/0.1/object-cache-0.1.91.jar
+~~~
+
+**Note: the curl command line above downloads version 0.1.91 (0.2 pre-release). You need to change to URL to reflect the version you want to download.**
+
+## Source code 
+
+Go to (ObjectCache)[https://github.com/progund/object-cache], click
+```Clone or download``` and copy the link ```Download ZIP```. The link
+is ```https://github.com/progund/object-cache/archive/master.zip```.
+
+We're using ```curl``` download - you can use the browser if you want to:
+
+~~~
+$ curl -LJO https://github.com/progund/object-cache/archive/master.zip
+$ unzip master.zip
+~~~
+
+There's a makefile you can if you want to modify ObjectCache. Here are the most useful targets:
 
 ```make``` - builds ObjectCache
 
