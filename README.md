@@ -166,7 +166,7 @@ Read objects from cache:
 
 ## Use ObjectCache in Android
 
-We have a more complete guide on how to use ObjectCache in Android, check out: [README-ANDROID.md][https://github.com/progund/object-cache/blob/master/doc/README-ANDROID.md]
+We have a more complete guide on how to use ObjectCache in Android, check out: https://github.com/progund/object-cache/blob/master/doc/README-ANDROID.md
 
 ### Create an ObjectCache in Android
 
