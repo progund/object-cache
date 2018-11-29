@@ -129,6 +129,7 @@ public class ObjectCache<T> {
       System.err.println(" Suspected missing class: " + missingClassName);
       System.err.println("");
       System.err.println("Make sure that the class \"" + missingClassName + "\" is compiled and it coresponding class file can be found via your CLASSPATH");
+      System.exit(1);
     } catch (Throwable ex) {
       ex.printStackTrace();
       return null;
