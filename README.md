@@ -173,7 +173,7 @@ between normal Java and Android. The reason is that we need to make
 sure that we're allowed to write in the directory to store the cache
 file.
 
-* reate an ObjectCache object, including the type of the objects to cache:
+Create an ObjectCache object, including the type of the objects to cache:
 
 ~~~
     String fileName =
