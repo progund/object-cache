@@ -1,4 +1,4 @@
-VERSION=0.2
+VERSION=0.2.1
 
 #
 # 
@@ -55,8 +55,10 @@ ANDROID_JAR_FILE=object-cache-android-$(VERSION).jar
 %.pdf: %.md
 	pandoc $< -o $@
 
+all: classes
+classes: $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
 
-$(JAR_FILE): check-stubs test $(OC_CLASSES) $(ANDROID_OC_CLASSES) 
+$(JAR_FILE): check-stubs classes test 
 	@echo "Creating jar file"
 	jar cvf $(JAR_FILE) `find se -name "*.class"` README.md
 	@echo "Created jar file: object-cache-$(VERSION).jar"
