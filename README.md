@@ -61,13 +61,42 @@ Let's say you want to cache objects of your super awesome class ```User```:
 
 ### Fixing the User class (above)
 
-You need to add a ```serialVersionUID```. Let's use ```1L```.
+You need to add a ```serialVersionUID```. Let's use ```1L``` for just a short while. 
 
 ~~~
   private static final long serialVersionUID = 1L;
 ~~~
 
-*Note: check out the text about serialization below. ```1L``` is not a good value. It is used as an example here.*
+Check out the text about serialization below and you'll understand
+that ```1L``` is not a good value. We need to generate a value, using
+```serialver``` that comes with your Java development kit. Compile the
+User class and run ```serialver```:
+
+~~~
+$ javac se/juneday/test/User.java
+$ $ serialver se.juneday.test.User
+se.juneday.test.User:    private static final long serialVersionUID = 4554358036161471220L;
+~~~
+
+Copy this part ```private static final long serialVersionUID =
+4554358036161471220L;``` in to the User class. It should now look
+something like:
+
+~~~
+package se.juneday.test;
+
+import java.io.Serializable;
+
+public class User implements Serializable {
+  String name;
+  String email;
+
+  private static final long serialVersionUID = 4554358036161471220L;
+
+  ....
+~~~
+
+
 
 So the class, ```User```, looks like this:
 
