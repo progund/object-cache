@@ -57,7 +57,7 @@ First steps :
 You should now see something like:
 ![Adding jar dependency - before add](images/add-dep-before.png)
 * Add the file by opening a file explorer* and drag the jar file to the newly opened window.
-![Adding jar dependency - after add](images/add-dep-before.png)
+![Adding jar dependency - after add](images/add-dep-after.png)
 * Double click the jar file in the window and then click ```OK```.
 * Click ```File``` and then click ```Sync with file system```
 * Click ```Build``` and then click ```Clean Project```
