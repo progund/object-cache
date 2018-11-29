@@ -24,6 +24,19 @@ public class ObjectCache<T> {
   private String cacheFileName;
   private final static long maxDiff = (60 * 60 * 1000);
 
+  static enum ExitStatus {
+    OC_OK(0),
+    OC_CLASS_NOT_FOUND(1);
+
+    ExitStatus(int status) {
+      this.status = status;
+    }
+    private int status;
+    int status() {
+      return status;
+    }
+
+  }
   /**
    * Creates a new ObjectCache instance.
    *
@@ -128,8 +141,8 @@ public class ObjectCache<T> {
       System.err.print("This most likely is because one (or many) of your classes can't be loaded.");
       System.err.println(" Suspected missing class: " + missingClassName);
       System.err.println("");
-      System.err.println("Make sure that the class \"" + missingClassName + "\" is compiled and it coresponding class file can be found via your CLASSPATH");
-      System.exit(1);
+      System.err.println("Make sure that the class \"" + missingClassName + "\" is compiled and its coresponding class file can be found via your CLASSPATH");
+      System.exit(ExitStatus.OC_CLASS_NOT_FOUND.status());
     } catch (Throwable ex) {
       ex.printStackTrace();
       return null;
