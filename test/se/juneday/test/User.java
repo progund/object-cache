@@ -6,8 +6,10 @@ public class User implements Serializable {
   String name;
   String email;
 
-  private static final long serialVersionUID = 1L;
-
+  // Generated using serialver
+  // $ serialver se.juneday.test.User
+  private static final long serialVersionUID = 4554358036161471220L;
+  
   public User(String name, String email) {
     this.name=name;
     this.email=email;
