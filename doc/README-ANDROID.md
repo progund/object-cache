@@ -114,6 +114,11 @@ import se.juneday.android.AndroidObjectCacheHelper.AndroidObjectCacheHelperExcep
    cache.storeObjects(members);
 ~~~
 
+### What will happen
+
+First time you run your app there's no data in the cache (surprise...not!) so you'll get a List with 0 elements in it. 
+
+If you store some elements in the cache you will get them back net time you start the app.
 
 
 
