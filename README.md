@@ -191,6 +191,8 @@ Go to (ObjectCache)[https://github.com/progund/object-cache] and click releases.
 curl -LJO https://github.com/progund/object-cache/releases/download/0.1/object-cache-0.1.91.jar
 ~~~
 
+**Note: the curl command line above downloads version 0.1.91 (0.2 pre-release). You need to change to URL to reflect the version you want to download.**
+
 ## Source code 
 
 Go to (ObjectCache)[https://github.com/progund/object-cache], click
