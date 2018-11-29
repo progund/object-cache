@@ -25,8 +25,7 @@ public class AndroidObjectCacheHelper  {
       Log.d(LOG_TAG, "Error, could not build file name for serialization", e);
       throw new AndroidObjectCacheHelperException(e, "could not build file name for serialization");
     }
-    String fileName = s +
-      "/" + clazz.getName();
+    String fileName = s + "/" + clazz.getName();
 
     return fileName;
   }
