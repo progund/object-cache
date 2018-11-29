@@ -63,7 +63,7 @@ You should now see something like:
 * Click ```Build``` and then click ```Clean Project```
 * Click ```Build``` and then click ```Rebuild Project```
 
-''File explorer examples: Nautilus or similar in GNU/Linux, Explorer in Windows and Finder in MacOS''.
+*File explorer examples: Nautilus or similar in GNU/Linux, Explorer in Windows and Finder in MacOS.*
 
 ## Using ObjectCache in your code
 
