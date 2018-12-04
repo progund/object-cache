@@ -181,7 +181,7 @@ public class ObjectCache<T> {
    * Gets the cached object (from RAM). This does not read the object
    * from file.
    *
-   * @return Number of cached objects
+   * @return Number of cached objects, -1 if nothing cached.
    */ 
   public int size() {
     if (objects == null) {
@@ -234,6 +234,15 @@ public class ObjectCache<T> {
     pull();
 
     return getSingle();
+  }
+
+  /**
+   * Clears the cache
+   *
+   * @return the cached object - if no object has been cached, null is returned
+   */ 
+  public void clear() {
+    set(new ArrayList<T>());
   }
 
 }
