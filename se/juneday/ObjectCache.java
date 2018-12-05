@@ -239,7 +239,6 @@ public class ObjectCache<T> {
   /**
    * Clears the cache
    *
-   * @return the cached object - if no object has been cached, null is returned
    */ 
   public void clear() {
     set(new ArrayList<T>());
