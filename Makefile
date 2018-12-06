@@ -17,6 +17,7 @@ OC_TEST_SRC= \
   test/se/juneday/test/ObjectCacheStoreManyTest.java \
   test/se/juneday/test/OCReaderSingleTest.java \
   test/se/juneday/test/OCReaderManyTest.java \
+  test/se/juneday/test/ObjectCacheClear.java \
   test/se/juneday/test/AndroidObjectCacheHelperTest.java
 
 
@@ -94,6 +95,10 @@ test: check-stubs $(OC_TEST_CLASSES)
 	@echo "  --== Test oc reader (many) ==--"
 	@java -cp $(CLASSPATH) se.juneday.test.OCReaderSingleTest
 
+	@echo "  ********** Testing single **********"
+	@echo "  --== Test clear (method) ==--"
+	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheClear
+
 	@echo "  ********** Misc **********"
 	@echo "  --== Test Android helper ==--"
 	@java -cp $(CLASSPATH) se.juneday.test.AndroidObjectCacheHelperTest 
@@ -110,7 +115,7 @@ clean:
 	@echo "all cleaned up"
 
 really-clean: clean
-	-rm -fr doc bin libs release
+	-rm -fr doc bin libs release *.jar
 	@echo "all cleaned up"
 
 release: check-stubs $(JAR_FILE) $(RELEASE_DIR) doc/index.html
