@@ -18,6 +18,7 @@ OC_TEST_SRC= \
   test/se/juneday/test/OCReaderSingleTest.java \
   test/se/juneday/test/OCReaderManyTest.java \
   test/se/juneday/test/ObjectCacheClear.java \
+  test/se/juneday/test/TimeoutTest.java \
   test/se/juneday/test/AndroidObjectCacheHelperTest.java
 
 
@@ -77,23 +78,25 @@ $(RELEASE_DIR):
 test: check-stubs $(OC_TEST_CLASSES)
 	@echo "  ********** Testing many **********"
 	@echo "  --== Test store (many) ==--"
-	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheStoreManyTest --store
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.ObjectCacheStoreManyTest --store
 	@echo "  --== Test ObjectCache Reader (many) ==--"
-	@java -cp $(CLASSPATH) se.juneday.ObjectCacheReader User
+	@java -ea  -cp $(CLASSPATH) se.juneday.ObjectCacheReader User
 	@echo "  --== Test read (many) ==--"
-	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheReadManyTest 
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.ObjectCacheReadManyTest 
 	@echo "  --== Test oc reader (many) ==--"
-	@java -cp $(CLASSPATH) se.juneday.test.OCReaderManyTest
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.OCReaderManyTest
 
 	@echo "  ********** Testing single **********"
 	@echo "  --== Test store (single) ==--"
-	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheStoreSingleTest --store
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.ObjectCacheStoreSingleTest --store
 	@echo "  --== Test ObjectCache Reader (single) ==--"
-	@java -cp $(CLASSPATH) se.juneday.ObjectCacheReader User
+	@java -ea  -cp $(CLASSPATH) se.juneday.ObjectCacheReader User
 	@echo "  --== Test read (single) ==--"
-	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheReadSingleTest 
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.ObjectCacheReadSingleTest 
 	@echo "  --== Test oc reader (many) ==--"
-	@java -cp $(CLASSPATH) se.juneday.test.OCReaderSingleTest
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.OCReaderSingleTest
+	@echo "  --== Test timeout ==--"
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.TimeoutTest
 
 	@echo "  ********** Testing single **********"
 	@echo "  --== Test clear (method) ==--"
@@ -101,7 +104,7 @@ test: check-stubs $(OC_TEST_CLASSES)
 
 	@echo "  ********** Misc **********"
 	@echo "  --== Test Android helper ==--"
-	@java -cp $(CLASSPATH) se.juneday.test.AndroidObjectCacheHelperTest 
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.AndroidObjectCacheHelperTest 
 
 download-dependencies: $(ANDROID_STUBS_JAR) 
 

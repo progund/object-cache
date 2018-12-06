@@ -15,7 +15,7 @@ public class OCReaderSingleTest {
     
     System.out.print("Testing reading objects: ");
     User cached = reader.object();
-    assert (cached.equals("Henrik Sandklef")) : "Expected Henrik Sandklef, found " + cached.name();
+    assert (cached.name().equals("Henrik Sandklef")) : "Expected Henrik Sandklef, found  \"" + cached.name() + "\"";
     
     System.out.println("OK");
   }
