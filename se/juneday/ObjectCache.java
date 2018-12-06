@@ -22,7 +22,7 @@ public class ObjectCache<T> {
   private long localCacheDate ;
 
   private String cacheFileName;
-  private final static long maxDiff = (60 * 60 * 1000);
+  private long maxDiff = (60 * 60 * 1000);
 
   static enum ExitStatus {
     OC_OK(0),
@@ -120,8 +120,12 @@ public class ObjectCache<T> {
     long diff =
       System.currentTimeMillis() - f.lastModified();
 
-    if (diff>maxDiff) {
-      System.err.println("cache timed out for objects");
+    // If non eternal timeout and
+    // timeout expired, clear cache and return null;
+    if ( ( maxDiff != 0 ) &&
+         (diff>maxDiff) ) {
+      System.err.println("cache timed out for objects, clearing cache");
+      clear();
       return null;
     }
     FileInputStream fis = null;
@@ -208,6 +212,18 @@ public class ObjectCache<T> {
   public void storeObject(T repo) {
     setSingle(repo);
     push();
+  }
+
+  /**
+   * Set timeout (seconds)
+   *
+   * @param 
+   */ 
+  public void timeout(long t) {
+    if ( t < 0 ) {
+      throw new IllegalArgumentException("Timeout can't be set to lezz than zero. " + t + " not valid");
+    }
+    maxDiff = t;
   }
 
   /**
