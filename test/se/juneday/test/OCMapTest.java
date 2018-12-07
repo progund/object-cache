@@ -14,7 +14,8 @@ public class OCMapTest {
     System.out.print("Testing reading Map of objects: ");
     Map<String, User> cached = reader.object();
     assert (cached.size()==4) : "Expected 4 users, found " + cached.size();
-    
     System.out.println("OK");
+
+    System.out.println("Map: \n\n" + cached);
   }
-}
+ }
