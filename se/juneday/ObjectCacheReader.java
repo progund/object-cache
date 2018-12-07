@@ -41,10 +41,10 @@ public class ObjectCacheReader<T> {
         }
         collectionName = objects.getClass().getSimpleName();
         
-        System.out.println(objects.length +
-                           " cached objects Array[" +
+        System.out.println("Array[" +
                            objects[0].getClass().getName()+
-                           "]:");
+                           "] (" + objects.length +
+                           " cached objects):" );
         for (int i=0; i<objects.length; i++) {
           System.out.println(" " + i + ": " + objects[i] );
         }
