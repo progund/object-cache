@@ -19,11 +19,12 @@ import java.io.ObjectOutputStream;
 public class ObjectCache<T> {
 
   private Collection<T> objects;
-  private long localCacheDate ;
-
+  private File cacheFile;
   private String cacheFileName;
   private long maxDiff = (60 * 60 * 1000);
-
+  private long cacheTime;
+ 
+  
   static enum ExitStatus {
     OC_OK(0),
     OC_CLASS_NOT_FOUND(1);
@@ -46,7 +47,6 @@ public class ObjectCache<T> {
     if (! (clazz instanceof Serializable)) {
       throw new IllegalArgumentException("Class \"" + clazz.getName() + "\" does not implement Serializable");
     }
-    localCacheDate = 0;
     cacheFileName = clazz.getSimpleName() + "_serialized.data";
   }
 
@@ -57,10 +57,31 @@ public class ObjectCache<T> {
    * "_serialized.data" is added to the parameter.
    */ 
   public ObjectCache(String fileName) {
-    localCacheDate = 0;
     cacheFileName = fileName + "_serialized.data";
   }
 
+  private boolean valid() {
+    // System.err.println("valid() ? cacheTime: " + cacheTime);
+    long diff =
+      System.currentTimeMillis() - cacheTime;
+    
+    // System.err.println("Cache valid? " +
+    //                    diff + " / " + maxDiff + " / " + cacheTime +
+    //                    "  ====> " +
+    //                    ( ( maxDiff == 0 ) || (diff<=maxDiff) ));
+    
+    // If non eternal timeout and
+    // timeout expired, clear cache and return null;
+    return ( ( maxDiff == 0 ) || (diff<=maxDiff) );
+  }
+  
+  private void validateCache() {
+    if ( ! valid() ) {
+      clear();
+    }
+  }
+  
+  
   /**
    * Sets a list of objects to cache (in RAM). This does not store the
    * objects to file.
@@ -68,8 +89,8 @@ public class ObjectCache<T> {
    * @param objects The objects to cache
    */ 
   private void set(Collection<T> objects) {
+    // System.err.println("set(objects)");
     this.objects = objects;
-    localCacheDate = System.currentTimeMillis();
   }
 
   /**
@@ -90,6 +111,8 @@ public class ObjectCache<T> {
    *
    */ 
   private void push() {
+    // System.err.println("push()");
+    cacheFile = null;
     FileOutputStream fos = null;
     ObjectOutputStream out = null;
     try {
@@ -112,22 +135,26 @@ public class ObjectCache<T> {
    */ 
   @SuppressWarnings("unchecked")
   private Collection<T> pull() {
-    File f = new File(cacheFileName);
-    if (!f.exists()) {
-      System.err.println("missing cache file: " + f);
-      return null;
-    }
-    long diff =
-      System.currentTimeMillis() - f.lastModified();
+    // System.err.println(" ** pull **") ;    
 
-    // If non eternal timeout and
-    // timeout expired, clear cache and return null;
-    if ( ( maxDiff != 0 ) &&
-         (diff>maxDiff) ) {
-      System.err.println("cache timed out for objects, clearing cache");
+    cacheFile = new File(cacheFileName);
+    // file null or no file
+    if ( (cacheFile==null) ||
+         (!cacheFile.exists() )) {
+      // System.err.println("missing cache file: " + cacheFile);
       clear();
-      return null;
+      return objects;
     }
+
+    cacheTime = cacheFile.lastModified();
+    
+    // invalid (old) file 
+    if ( ! valid() ) {
+      // System.err.println(" INVALID OLD CACHE FILE");
+      clear();
+      return objects;
+    }
+    
     FileInputStream fis = null;
     ObjectInputStream in = null;
     Collection<T> tmpObjects;
@@ -151,6 +178,9 @@ public class ObjectCache<T> {
       ex.printStackTrace();
       return null;
     }
+
+    cacheTime = System.currentTimeMillis();
+    
     return objects;
   }
 
@@ -161,6 +191,7 @@ public class ObjectCache<T> {
    * @return The list of cached objects 
    */ 
   private Collection<T> get() {
+    validateCache();
     return objects;
   }
 
@@ -171,6 +202,7 @@ public class ObjectCache<T> {
    * @return The cached object
    */ 
   private T getSingle() {
+    validateCache();
     if (objects == null) {
       return null;
     }
@@ -188,6 +220,7 @@ public class ObjectCache<T> {
    * @return Number of cached objects, -1 if nothing cached.
    */ 
   public int size() {
+    validateCache();
     if (objects == null) {
       return -1;
     }
@@ -200,8 +233,10 @@ public class ObjectCache<T> {
    * @param repos - the objects to cache
    */ 
   public void storeObjects(Collection<T> repos) {
+    // System.err.println("storeObjects()");
     set(repos);
     push();
+    cacheTime = System.currentTimeMillis();
   }
 
   /**
@@ -212,10 +247,11 @@ public class ObjectCache<T> {
   public void storeObject(T repo) {
     setSingle(repo);
     push();
+    cacheTime = System.currentTimeMillis();
   }
 
   /**
-   * Set timeout (seconds)
+   * Set timeout (milliseconds)
    *
    * @param 
    */ 
@@ -232,9 +268,7 @@ public class ObjectCache<T> {
    * @return the cached objects - if no object has been cached, an empty list is returned
    */ 
   public Collection<T> readObjects() {
-    pull();
-
-    Collection<T> cachedObjects = get();
+    Collection<T> cachedObjects = pull();
     if (cachedObjects!=null) {
       return cachedObjects;
     }
@@ -257,6 +291,7 @@ public class ObjectCache<T> {
    *
    */ 
   public void clear() {
+    cacheTime = 0;
     set(new ArrayList<T>());
   }
 
