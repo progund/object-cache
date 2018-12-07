@@ -21,12 +21,14 @@ public class TimeoutTest {
     
     users.add(new User("Henrik Sandklef", "hesa@sandklef.com"));
     users.add(new User("Rikard Fröberg", "rille@rillefroberg.se"));
-    assert (users.size()==2) : "Expected 2 users, found " + users.size();
+    users.add(new User("Edson", "edson@brazil.com"));
+    users.add(new User("diego", "maradona@argentina.com"));
+    assert (users.size()==4) : "Expected 2 users, found " + users.size();
     
     // Add the users created above. Now the users are in RAM
     cache.storeObjects(users);
     // Store the users set above to file. Now the users are serialized to file
-    assert (cache.size()==2) : "Expected 2 users, found " + cache.size();
+    assert (cache.size()==4) : "Expected 4 users, found " + cache.size();
     System.out.println("OK");
 
     System.out.println("Setting time to 2 seconds");
@@ -34,8 +36,8 @@ public class TimeoutTest {
     System.out.println("Sleep 1 second ");
     try {
       TimeUnit.SECONDS.sleep(1); 
-      System.out.print("Testing list size is 2: ");
-      assert (cache.size()==2) : "Expected 2 users, found " + cache.size();
+      System.out.print("Testing list size is 4: ");
+      assert (cache.size()==4) : "Expected 4 users, found " + cache.size();
       System.out.println("OK");
       
       System.out.println("Sleep 2 seconds ");
