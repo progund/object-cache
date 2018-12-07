@@ -31,16 +31,16 @@ public class TimeoutTest {
     assert (cache.size()==4) : "Expected 4 users, found " + cache.size();
     System.out.println("OK");
 
-    System.out.println("Setting time to 2 seconds");
+    System.out.println(" * Setting time to 2 seconds");
     cache.timeout(2000);  // 2 second
-    System.out.println("Sleep 1 second ");
+    System.out.println(" * Sleep 1 second ");
     try {
       TimeUnit.SECONDS.sleep(1); 
       System.out.print("Testing list size is 4: ");
       assert (cache.size()==4) : "Expected 4 users, found " + cache.size();
       System.out.println("OK");
       
-      System.out.println("Sleep 2 seconds ");
+      System.out.println(" * Sleep 2 seconds to cause cache timeout");
       TimeUnit.SECONDS.sleep(2);
       System.out.print("Testing list size is 0 (timout expired): ");
       assert (cache.size()==0) : "Expected 0 users, found " + cache.size();
