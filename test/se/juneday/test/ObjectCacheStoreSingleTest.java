@@ -17,7 +17,7 @@ public class ObjectCacheStoreSingleTest {
     // Add the users created above. Now the users are in RAM
     cache.storeObject(new User("Henrik Sandklef", "hesa@sandklef.com"));
     // Store the users set above to file. Now the users are serialized to file
-    assert (cache.size()==1) : "Expected 1 users, found " + cache.size();
+    assert (cache.readObject().name().equals("Henrik Sandklef")) : "Expected Henrik Sandklef users, found " + cache.readObject().name();
     
     System.out.println("OK");
   }

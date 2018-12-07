@@ -9,11 +9,11 @@ import se.juneday.test.User;
 public class ObjectCacheReadManyTest {
 
   public static void main(String[] args) {
-    ObjectCache<User> cache = new ObjectCache<>(User.class);
+    ObjectCache<Collection<User>> cache = new ObjectCache<>(User.class);
     
     System.out.print("Testing reading objects: ");
     // Get the users from cache
-    Collection<User> cached = cache.readObjects();
+    Collection<User> cached = cache.readObject();
     assert (cached.size()==2) : "Expected 2, found " + cached.size();
     System.out.println("OK");
   }

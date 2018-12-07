@@ -22,23 +22,28 @@ public class ObjectCacheReader<T> {
    * file. 
    *
    */ 
-  public void printObjects() {
-    Collection<T> objects = objects();
+  public void printObject() {
 
-    if (objects!=null) {
-      for (T o : objects) {
-        System.out.println(" * " + o );
+    if ( cache.readObject() instanceof Collection ) {
+      String collectionName ;
+      Collection<Object> objects = (Collection<Object>) cache.readObject();
+      if ( objects == null ) {
+        System.err.println("Collection null, nothing to print");
+        return;
       }
-    }
-  }
+      if ( objects.size() == 0 ) {
+        System.err.println("Collection empty, nothing to print");
+        return;
+      }
+      collectionName = objects.getClass().getSimpleName();
 
-  /**
-   * Retrieves and returns the list of stored objects from
-   * file. 
-   *
-   */ 
-  public Collection<T> objects() {
-      return cache.readObjects();
+      System.out.println( "Cached objects " + collectionName + "<>:" );
+      for (Object o : objects) {
+        System.out.println(" * " + o + "    <" + o.getClass().getName()+ ">");
+      }
+    } else {
+      System.out.println(" * " + cache.readObject());
+    }
   }
 
   /**
@@ -71,7 +76,7 @@ public class ObjectCacheReader<T> {
     }
     
     ObjectCacheReader<Object> ocr = new ObjectCacheReader<>(args[0]);
-    ocr.printObjects();
+    ocr.printObject();
   }
   
 }

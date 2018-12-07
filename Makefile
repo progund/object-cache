@@ -103,6 +103,7 @@ test: check-stubs $(OC_TEST_CLASSES)
 	@echo "  --== Test Android helper ==--"
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.AndroidObjectCacheHelperTest 
 	@echo "  --== Test clear (method) ==--"
+#	rm User_serialized.data
 	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheClear
 
 download-dependencies: $(ANDROID_STUBS_JAR) 

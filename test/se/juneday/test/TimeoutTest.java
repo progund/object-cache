@@ -9,12 +9,11 @@ import se.juneday.test.User;
 
 import java.util.concurrent.TimeUnit;
 
-
-
 public class TimeoutTest {
 
   public static void main(String[] args) {
-    ObjectCache<User> cache = new ObjectCache<>(User.class);
+    //    ArrayList<User> list = new ArrayList<>();
+    ObjectCache<Collection<User>> cache = new ObjectCache<>(User.class);
 
     System.out.print("Testing creating objects: ");
     Collection<User> users = new ArrayList<>();
@@ -26,9 +25,9 @@ public class TimeoutTest {
     assert (users.size()==4) : "Expected 2 users, found " + users.size();
     
     // Add the users created above. Now the users are in RAM
-    cache.storeObjects(users);
+    cache.storeObject(users);
     // Store the users set above to file. Now the users are serialized to file
-    assert (cache.size()==4) : "Expected 4 users, found " + cache.size();
+    assert (cache.readObject().size()==4) : "Expected 4 users, found " + cache.readObject().size();
     System.out.println("OK");
 
     System.out.println(" * Setting time to 2 seconds");
@@ -37,16 +36,16 @@ public class TimeoutTest {
     try {
       TimeUnit.SECONDS.sleep(1); 
       System.out.print("Testing list size is 4: ");
-      assert (cache.size()==4) : "Expected 4 users, found " + cache.size();
+      assert (cache.readObject().size()==4) : "Expected 4 users, found " + cache.readObject().size();
       System.out.println("OK");
       
       System.out.println(" * Sleep 2 seconds to cause cache timeout");
       TimeUnit.SECONDS.sleep(2);
       System.out.print("Testing list size is 0 (timout expired): ");
-      assert (cache.size()==0) : "Expected 0 users, found " + cache.size();
+      assert (cache.readObject()==null) : "Expected null cache: got " + cache ;
       System.out.println("OK");
     } catch (Exception e) {
-      System.out.println("Timeout failed");
+      System.out.println("Timeout check failed");
       assert false ;
     }
 
@@ -54,7 +53,7 @@ public class TimeoutTest {
     // Clear the cache
     cache.clear();
     // check cache has 0 elements
-    assert (cache.size()==0) : "Expected 0 users, found " + cache.size();
+    assert (cache.readObject()==null) : "Expected cache null";
 
   }
 }

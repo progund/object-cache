@@ -15,13 +15,7 @@ Collection or one single object).
 
 # Supported classes
 
-For single object:
-
-* all classes implementing Serializable
-
-For many objects
-
-* All Collections classes implementing Serializable
+All classes (and the classes it is composed of recusrively) implementing Serializable
 
 # Requirements
 
@@ -126,13 +120,13 @@ In this example we'll (again) be looking at a class called ```User``` representi
 
 ## Use ObjectCache in Java
 
-Create an ObjectCache object, including the type of the objects to cache:
+### Single object
+
+Create an ObjectCache object, including the type of the objects to cache, let's say we want to store a single User:
 
 ~~~
     ObjectCache<User> cache = new ObjectCache<>(User.class);
 ~~~
-
-### Single object
 
 Store a single object in cache:
 
@@ -149,10 +143,16 @@ Read object from cache:
 
 ### Collection of objects
 
+Create an ObjectCache object, including the type of the objects to cache, let's say we want to store a Collections of User(s):
+
+~~~
+    ObjectCache<Collection<User>> cache = new ObjectCache<>(User.class);
+~~~
+
 Store a ```Collection``` (e g ArralyList) of objects in cache:
 
 ~~~
-    List<User> users = new ArrayList<>();
+    Collection<User> users = new ArrayList<>();
     users.add(new User("Henrik Sandklef", "hesa@henriksandklef.com"));
     users.add(new User("Rikard Fröberg", "rille@rillefroberg.se"));
     cache.storeObjects(users);
@@ -188,7 +188,7 @@ Create an ObjectCache object, including the type of the objects to cache:
 ~~~
     String fileName =
         AndroidObjectCacheHelper.objectCacheFileName(context, User.class);
-    ObjectCache<User> cache = new ObjectCache<>(fileName);
+    ObjectCache<Collection<User>> cache = new ObjectCache<>(fileName);
 ~~~
 
 # Download ObjectCache

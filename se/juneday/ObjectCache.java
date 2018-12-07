@@ -12,23 +12,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * Represents a cache for objects.
+ * Represents a cache for object.
  * Uses Serializable and a file.
  *
  */
 public class ObjectCache<T> {
+  
+  private T object;
 
-  private Collection<T> objects;
   private File cacheFile;
   private String cacheFileName;
   private long maxDiff = (60 * 60 * 1000);
   private long cacheTime;
- 
   
   static enum ExitStatus {
     OC_OK(0),
     OC_CLASS_NOT_FOUND(1);
-
+    
     ExitStatus(int status) {
       this.status = status;
     }
@@ -36,8 +36,9 @@ public class ObjectCache<T> {
     int status() {
       return status;
     }
-
+    
   }
+
   /**
    * Creates a new ObjectCache instance.
    *
@@ -49,7 +50,7 @@ public class ObjectCache<T> {
     }
     cacheFileName = clazz.getSimpleName() + "_serialized.data";
   }
-
+  
   /**
    * Creates a new ObjectCache instance.
    *
@@ -59,7 +60,7 @@ public class ObjectCache<T> {
   public ObjectCache(String fileName) {
     cacheFileName = fileName + "_serialized.data";
   }
-
+  
   private boolean valid() {
     // System.err.println("valid() ? cacheTime: " + cacheTime);
     long diff =
@@ -83,31 +84,18 @@ public class ObjectCache<T> {
   
   
   /**
-   * Sets a list of objects to cache (in RAM). This does not store the
-   * objects to file.
-   *
-   * @param objects The objects to cache
-   */ 
-  private void set(Collection<T> objects) {
-    // System.err.println("set(objects)");
-    this.objects = objects;
-  }
-
-  /**
-   * Sets one object to cache (in RAM). This does not store the
+   * Sets an object to cache (in RAM). This does not store the
    * object to file.
    *
    * @param object The object to cache
    */ 
-  private void setSingle(T object) {
-    Collection<T> objectList = new ArrayList<>();
-    objectList.add(object);
-    this.objects = objectList;
+  private void set(T object) {
+    // System.err.println("set(object)");
+    this.object = object;
   }
 
-
   /**
-   * Stores the list of cached (in RAM) objects to a file.
+   * Stores the list of cached (in RAM) object to a file.
    *
    */ 
   private void push() {
@@ -118,7 +106,7 @@ public class ObjectCache<T> {
     try {
       fos = new FileOutputStream(cacheFileName);
       out = new ObjectOutputStream(fos);
-      out.writeObject(objects);      
+      out.writeObject(object);      
       out.close();
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -128,13 +116,13 @@ public class ObjectCache<T> {
 
 
   /**
-   * Retrieves (and returns) the list of stored objects from
-   * file. These objects are now stored in RAM.
+   * Retrieves (and returns) the stored object from
+   * file. These object are now stored in RAM.
    *
-   * @return The list of objects read from file.
+   * @return The object read from file.
    */ 
   @SuppressWarnings("unchecked")
-  private Collection<T> pull() {
+  private T pull() {
     // System.err.println(" ** pull **") ;    
 
     cacheFile = new File(cacheFileName);
@@ -143,7 +131,7 @@ public class ObjectCache<T> {
          (!cacheFile.exists() )) {
       // System.err.println("missing cache file: " + cacheFile);
       clear();
-      return objects;
+      return object;
     }
 
     cacheTime = cacheFile.lastModified();
@@ -152,21 +140,21 @@ public class ObjectCache<T> {
     if ( ! valid() ) {
       // System.err.println(" INVALID OLD CACHE FILE");
       clear();
-      return objects;
+      return object;
     }
     
     FileInputStream fis = null;
     ObjectInputStream in = null;
-    Collection<T> tmpObjects;
+    T tmpObject;
     try {
       fis = new FileInputStream(cacheFileName);
       in = new ObjectInputStream(fis);
-      tmpObjects = (Collection<T>) in.readObject();
+      tmpObject = (T) in.readObject();
       in.close();
-      objects = tmpObjects;
+      object = tmpObject;
     } catch (ClassNotFoundException ex) {
       //      ex.printStackTrace();
-      System.err.println("\n***Failed reading objects from " + cacheFileName + " ***") ;
+      System.err.println("\n***Failed reading object from " + cacheFileName + " ***") ;
       //      StackTraceElement[] elements = ex.getStackTrace();
       String missingClassName = ex.getMessage();
       System.err.print("This most likely is because one (or many) of your classes can't be loaded.");
@@ -181,71 +169,30 @@ public class ObjectCache<T> {
 
     cacheTime = System.currentTimeMillis();
     
-    return objects;
+    return object;
   }
 
   /**
-   * Gets a list of cached objects (from RAM). This does not read the
-   * objects from file.
-   *
-   * @return The list of cached objects 
-   */ 
-  private Collection<T> get() {
-    validateCache();
-    return objects;
-  }
-
-  /**
-   * Gets the cached object (from RAM). This does not read the object
-   * from file.
+   * Gets the cached object (from RAM). This does not read the
+   * object from file.
    *
    * @return The cached object
    */ 
-  private T getSingle() {
+  private T get() {
     validateCache();
-    if (objects == null) {
-      return null;
-    }
-    Iterator<T> iter = objects.iterator();
-    if ( iter.hasNext() ) {
-      return iter.next();
-    }
-    return null;
+    return object;
   }
 
+  /* ---------------------------- */
+  
   /**
-   * Gets the cached object (from RAM). This does not read the object
-   * from file.
+   * Store (cache) object in the cache
    *
-   * @return Number of cached objects, -1 if nothing cached.
+   * @param repos - the object to cache
    */ 
-  public int size() {
-    validateCache();
-    if (objects == null) {
-      return -1;
-    }
-    return objects.size();
-  }
-
-  /**
-   * Store (cache) objects in the cache
-   *
-   * @param repos - the objects to cache
-   */ 
-  public void storeObjects(Collection<T> repos) {
-    // System.err.println("storeObjects()");
-    set(repos);
-    push();
-    cacheTime = System.currentTimeMillis();
-  }
-
-  /**
-   * Store (cache) one single object in the cache
-   *
-   * @param repo - the object to cache
-   */ 
-  public void storeObject(T repo) {
-    setSingle(repo);
+  public void storeObject(T object) {
+    // System.err.println("storeObject()");
+    set(object);
     push();
     cacheTime = System.currentTimeMillis();
   }
@@ -263,27 +210,13 @@ public class ObjectCache<T> {
   }
 
   /**
-   * Read (cached) objects from the cache
-   *
-   * @return the cached objects - if no object has been cached, an empty list is returned
-   */ 
-  public Collection<T> readObjects() {
-    Collection<T> cachedObjects = pull();
-    if (cachedObjects!=null) {
-      return cachedObjects;
-    }
-    return new ArrayList<>();
-  }
-
-  /**
    * Read one single (cached) object from the cache
    *
    * @return the cached object - if no object has been cached, null is returned
    */ 
   public T readObject() {
     pull();
-
-    return getSingle();
+    return get();
   }
 
   /**
@@ -292,7 +225,7 @@ public class ObjectCache<T> {
    */ 
   public void clear() {
     cacheTime = 0;
-    set(new ArrayList<T>());
+    set(null);
   }
 
 }

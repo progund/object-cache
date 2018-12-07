@@ -9,10 +9,10 @@ import se.juneday.test.User;
 public class OCReaderManyTest {
 
   public static void main(String[] args) {
-    ObjectCacheReader<User> reader = new ObjectCacheReader<>(User.class.getSimpleName());
+    ObjectCacheReader<Collection<User>> reader = new ObjectCacheReader<>(User.class.getSimpleName());
 
     System.out.print("Testing reading objects: ");
-    Collection<User> cached = reader.objects();
+    Collection<User> cached = reader.object();
     assert (cached.size()==2) : "Expected 2 users, found " + cached.size();
     
     System.out.println("OK");
