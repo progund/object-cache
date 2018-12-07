@@ -164,6 +164,14 @@ Read objects from cache:
     Collection<User> cached = cache.readObjects();
 ~~~
 
+## Clear Cache
+
+To clear the cache you simple invoke the ```clear()``` method.
+
+~~~
+    cache.clear();
+~~~
+
 ## Use ObjectCache in Android
 
 We have a more complete guide on how to use ObjectCache in Android, check out: https://github.com/progund/object-cache/blob/master/doc/README-ANDROID.md
