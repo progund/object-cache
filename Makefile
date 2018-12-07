@@ -19,6 +19,8 @@ OC_TEST_SRC= \
   test/se/juneday/test/OCReaderManyTest.java \
   test/se/juneday/test/ObjectCacheMapTest.java \
   test/se/juneday/test/OCMapTest.java \
+  test/se/juneday/test/ObjectCacheArrayTest.java \
+  test/se/juneday/test/OCReaderArrayTest.java \
   test/se/juneday/test/ObjectCacheClear.java \
   test/se/juneday/test/TimeoutTest.java \
   test/se/juneday/test/AndroidObjectCacheHelperTest.java
@@ -106,10 +108,14 @@ test: check-stubs $(OC_TEST_CLASSES)
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.AndroidObjectCacheHelperTest 
 	@echo "  --== Test clear (method) ==--"
 	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheClear
-	@echo "  --== Test many (map) ==--"
+	@echo "  --== Test many (Map) ==--"
 	rm User_serialized.data
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.ObjectCacheMapTest
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.OCMapTest
+	@echo "  --== Test many (Array) ==--"
+	rm User_serialized.data
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.ObjectCacheArrayTest
+	@java -ea  -cp $(CLASSPATH) se.juneday.test.OCReaderArrayTest
 
 download-dependencies: $(ANDROID_STUBS_JAR) 
 
