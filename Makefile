@@ -98,8 +98,6 @@ test: check-stubs $(OC_TEST_CLASSES)
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.OCReaderSingleTest
 	@echo "  --== Test timeout ==--"
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.TimeoutTest
-
-	@echo "  ********** Testing single **********"
 	@echo "  --== Test clear (method) ==--"
 	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheClear
 
