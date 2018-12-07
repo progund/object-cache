@@ -76,6 +76,7 @@ $(RELEASE_DIR):
 	mkdir -p $(RELEASE_DIR) 
 
 test: check-stubs $(OC_TEST_CLASSES)
+	rm -f User_serialized.data
 	@echo "  ********** Testing many **********"
 	@echo "  --== Test store (many) ==--"
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.ObjectCacheStoreManyTest --store
