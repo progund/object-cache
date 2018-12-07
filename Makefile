@@ -98,12 +98,12 @@ test: check-stubs $(OC_TEST_CLASSES)
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.OCReaderSingleTest
 	@echo "  --== Test timeout ==--"
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.TimeoutTest
-	@echo "  --== Test clear (method) ==--"
-	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheClear
 
 	@echo "  ********** Misc **********"
 	@echo "  --== Test Android helper ==--"
 	@java -ea  -cp $(CLASSPATH) se.juneday.test.AndroidObjectCacheHelperTest 
+	@echo "  --== Test clear (method) ==--"
+	@java -cp $(CLASSPATH) se.juneday.test.ObjectCacheClear
 
 download-dependencies: $(ANDROID_STUBS_JAR) 
 
