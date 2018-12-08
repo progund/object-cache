@@ -83,7 +83,7 @@ import se.juneday.android.AndroidObjectCacheHelper.AndroidObjectCacheHelperExcep
 
 ~~~
   // ObjectCache
-  private ObjectCache<Member> cache;
+  private ObjectCache<List<Member>> cache;
 ~~~
 
 ### Initialize and use the cache
@@ -101,7 +101,7 @@ import se.juneday.android.AndroidObjectCacheHelper.AndroidObjectCacheHelperExcep
       e.printStackTrace();
     }
     cache = new ObjectCache<>(fileName);
-    members = (List<Member>) cache.readObjects();
+    members = cache.readObjects();
     Log.d(LOG_TAG, "cache:  reading objects: " + members.size());
   }
 ~~~
