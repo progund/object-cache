@@ -44,16 +44,25 @@ public class TimeoutTest {
       System.out.print("Testing list size is 0 (timout expired): ");
       assert (cache.readObject()==null) : "Expected null cache: got " + cache ;
       System.out.println("OK");
-    } catch (Exception e) {
+    }  catch (Exception e) {
       System.out.println("Timeout check failed");
       assert false ;
     }
 
-    
     // Clear the cache
     cache.clear();
     // check cache has 0 elements
     assert (cache.readObject()==null) : "Expected cache null";
 
+    // Check timeout < 0 gives an exception
+    System.out.print("Negative timeout test: ");
+    try {
+      cache.timeout(-1);
+      assert false : "Negative timeout should result in an exception";
+    } catch (IllegalArgumentException e) {
+      //      e.printStackTrace();
+      System.out.println("OK");
+    } 
+    
   }
 }
