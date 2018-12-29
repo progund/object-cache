@@ -188,7 +188,7 @@ public class ObjectCache<T> {
   /**
    * Store (cache) object in the cache
    *
-   * @param repos - the object to cache
+   * @param object - the object to cache
    */ 
   public void storeObject(T object) {
     // System.err.println("storeObject()");
@@ -200,7 +200,7 @@ public class ObjectCache<T> {
   /**
    * Set timeout (milliseconds)
    *
-   * @param 
+   * @param t - timeout to use
    */ 
   public void timeout(long t) {
     if ( t < 0 ) {

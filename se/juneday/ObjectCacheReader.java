@@ -78,6 +78,7 @@ public class ObjectCacheReader<T> {
    * Retrieves and returns the stored object from
    * file. 
    *
+   * @return cached object
    */ 
   public T object() {
     return cache.readObject();
