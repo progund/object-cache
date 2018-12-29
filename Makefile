@@ -1,6 +1,5 @@
 VERSION=0.2.3
 
-
 #
 # 
 #
@@ -51,7 +50,6 @@ ANDROID_OC_CLASSES=$(ANDROID_OC_SRC:%.java=%.class)
 OC_TEST_CLASSES=$(OC_TEST_SRC:%.java=%.class)
 
 JAR_FILE=object-cache-$(VERSION).jar
-ANDROID_JAR_FILE=object-cache-android-$(VERSION).jar
 
 #
 # Rules
@@ -134,7 +132,8 @@ really-clean: clean
 	@echo "all cleaned up"
 
 release: check-stubs $(JAR_FILE) $(RELEASE_DIR) doc/index.html
-	mv $(JAR_FILE) $(ANDROID_JAR_FILE) doc/ $(RELEASE_DIR)/ 
+	ls -al
+	echo	mv $(JAR_FILE) doc/ $(RELEASE_DIR)/ 
 
 doc/index.html: 
 	javadoc -d doc -link "https://docs.oracle.com/javase/8/docs/api/" se.juneday
@@ -147,6 +146,8 @@ check-stubs:
 $(ANDROID_STUBS_JAR):
 	mkdir -p libs
 	curl -o $(ANDROID_STUBS_JAR) -LJ $(ANDROID_STUBS_JAR_URL) 
+
+clean-release: really-clean download-dependencies jar release
 
 
 .PHONY: libs
