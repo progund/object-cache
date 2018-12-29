@@ -132,8 +132,7 @@ really-clean: clean
 	@echo "all cleaned up"
 
 release: check-stubs $(JAR_FILE) $(RELEASE_DIR) doc/index.html
-	ls -al
-	echo	mv $(JAR_FILE) doc/ $(RELEASE_DIR)/ 
+	mv $(JAR_FILE) doc/ $(RELEASE_DIR)/ 
 
 doc/index.html: 
 	javadoc -d doc -link "https://docs.oracle.com/javase/8/docs/api/" se.juneday
