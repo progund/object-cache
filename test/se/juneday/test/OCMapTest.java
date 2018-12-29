@@ -16,6 +16,7 @@ public class OCMapTest {
     assert (cached.size()==4) : "Expected 4 users, found " + cached.size();
     System.out.println("OK");
 
-    System.out.println("Map: \n\n" + cached);
+    reader.printObject();
+    
   }
  }
