@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.InvalidClassException;
 
 /**
  * Represents a cache for object.
@@ -60,8 +61,9 @@ public class ObjectCache<T> {
   public ObjectCache(String fileName) {
     cacheFileName = fileName + "_serialized.data";
   }
-  
-  private boolean valid() {
+
+
+  public boolean valid() {
     // System.err.println("valid() ? cacheTime: " + cacheTime);
     long diff =
       System.currentTimeMillis() - cacheTime;
@@ -152,6 +154,10 @@ public class ObjectCache<T> {
       tmpObject = (T) in.readObject();
       in.close();
       object = tmpObject;
+    } catch (InvalidClassException ex) {
+      System.err.println("\n***Failed reading object from " + cacheFileName + " ***") ;
+      System.err.print("This most likely is because one (or many) of your classes have been changed since the cache was written");
+      object = null;
     } catch (ClassNotFoundException ex) {
       //      ex.printStackTrace();
       System.err.println("\n***Failed reading object from " + cacheFileName + " ***") ;
@@ -207,6 +213,36 @@ public class ObjectCache<T> {
       throw new IllegalArgumentException("Timeout can't be set to lezz than zero. " + t + " not valid");
     }
     maxDiff = t;
+  }
+
+  /**
+   * Get timeout (milliseconds)
+   *
+   * @return timeout used
+   */ 
+  public long timeout() {
+    return t;
+  }
+
+  /**
+   * Get cache time
+   *
+   * @return time (millisecs) when cache was written
+   */ 
+  public long cacheTime() {
+    return cacheTime;
+  }
+
+  /**
+   * Get remainging cache time
+   *
+   * @return time (millisecs) until cache expires (negative if expired or eternal)
+   */ 
+  public long cacheExpirationTime() {
+    if (maxDiff==0) {
+      retrun -1;
+    }
+    return System.currentTimeMillis() - cacheTime;
   }
 
   /**
