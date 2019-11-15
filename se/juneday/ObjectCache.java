@@ -221,7 +221,7 @@ public class ObjectCache<T> {
    * @return timeout used
    */ 
   public long timeout() {
-    return t;
+    return maxDiff;
   }
 
   /**
@@ -240,7 +240,7 @@ public class ObjectCache<T> {
    */ 
   public long cacheExpirationTime() {
     if (maxDiff==0) {
-      retrun -1;
+      return -1;
     }
     return System.currentTimeMillis() - cacheTime;
   }
